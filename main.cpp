@@ -131,9 +131,7 @@ public:
         buses_to_stops[bus] = stops;
         for (const string& stop : stops) {
             stops_to_buses[stop].push_back(bus);
-        }
-        
-        
+        }     
     }
 
     BusesForStopResponse GetBusesForStop(const string& stop) const {
