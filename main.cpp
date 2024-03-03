@@ -78,23 +78,18 @@ ostream& operator<<(ostream& os, const StopsForBusResponse& r) {
     if (r.stops.size() == 0) {
         os << "No bus"s;
     } else {
-        bool is_first_1 = true;
+        bool is_first = true;
         for (auto& stop : r.stops) {
-            if (!is_first_1) {
+            if (!is_first) {
                 os << endl;
             }
-            is_first_1 = false;
-            os << "Stop " << stop.first << ": "s;
+            is_first = false;
+            os << "Stop " << stop.first << ":"s;
             if (stop.second.size() == 0) {
-                os << "no interchange"s;
+                os << " no interchange"s;
             } else {
-                bool is_first = true;
                 for (const string& bus : stop.second) {
-                    if (!is_first) {
-                        os << " "s;
-                    }
-                    is_first = false;
-                    os << bus;
+                    os << " "s << bus;
                 }
             }
         }
@@ -113,12 +108,16 @@ ostream& operator<<(ostream& os, const AllBusesResponse& r) {
     if (r.buses.empty()) {
         os << "No buses"s;
     } else {
+        bool is_first = true;
         for (auto& bus : r.buses) {
-            os << "Bus "s << bus.first << ": "s;
-            for (const string& stop : bus.second) {
-                os << stop << " "s;
+            if (!is_first) {
+                os << endl;
             }
-            os << endl;
+            is_first = false;
+            os << "Bus "s << bus.first << ":"s;
+            for (const string& stop : bus.second) {
+                os << " "s << stop;
+            }
         }
     }
     return os;
@@ -131,7 +130,9 @@ public:
         buses_to_stops[bus] = stops;
         for (const string& stop : stops) {
             stops_to_buses[stop].push_back(bus);
-        }     
+        }
+        
+        
     }
 
     BusesForStopResponse GetBusesForStop(const string& stop) const {
